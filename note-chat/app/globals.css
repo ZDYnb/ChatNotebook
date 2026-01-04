@@ -1,0 +1,46 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  background-color: #f7f7f7;
+  color: #1f2933;
+}
+
+body {
+  margin: 0;
+}
+
+.app-shell {
+  min-height: 100vh;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.app-header {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.app-subtitle {
+  margin: 0.25rem 0 0;
+  color: #52606d;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.list {
+  padding-left: 1.25rem;
+  margin: 0.25rem 0;
+}

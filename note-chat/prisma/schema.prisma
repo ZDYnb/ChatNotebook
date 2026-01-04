@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+model Session {
+  id           Int           @id @default(autoincrement())
+  title        String?
+  projectTag   String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  messages     Message[]
+  sourceBlocks SourceBlock[]
+  atomicNotes  AtomicNote[]
+  flashcards   Flashcard[]
+  dailyLogs    DailyLog[]
+}
+
+model Message {
+  id         Int         @id @default(autoincrement())
+  session    Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId  Int
+  role       MessageRole
+  content    String
+  metadata   Json?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model SourceBlock {
+  id         Int      @id @default(autoincrement())
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId  Int
+  content    String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AtomicNote {
+  id           Int         @id @default(autoincrement())
+  session      Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId    Int
+  title        String?
+  content      String
+  noteType     String?
+  confidence   Int?
+  sourceRefs   Json        @default(json("[]"))
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  flashcards   Flashcard[]
+}
+
+model Flashcard {
+  id           Int          @id @default(autoincrement())
+  session      Session      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId    Int
+  atomicNote   AtomicNote?  @relation(fields: [atomicNoteId], references: [id], onDelete: SetNull)
+  atomicNoteId Int?
+  front        String
+  back         String
+  tags         String?
+  sourceRefs   Json         @default(json("[]"))
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model DailyLog {
+  id                 Int       @id @default(autoincrement())
+  session            Session?  @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  sessionId          Int?
+  logDate            DateTime  @default(now())
+  diaryText          String?
+  learnedSummary     String?
+  didSummary         String?
+  tomorrowSuggestion String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
